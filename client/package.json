@@ -16,7 +16,7 @@
     "axios": "^1.6.7",
     "@splidejs/react-splide": "^0.7.12",
     "react-hook-form": "^7.50.1",
-    "lucide-react": "^0.344.0"
+    "lucide-react": "^0.468.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
