@@ -1,0 +1,27 @@
+{
+  "name": "oceanr-enterprises",
+  "version": "1.0.0",
+  "description": "OceanR Enterprises - Full Stack MERN Website",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "build": "npm run build --prefix client",
+    "seed": "npm run seed --prefix server",
+    "start": "npm start --prefix server"
+  },
+  "keywords": [
+    "oceanr",
+    "enterprises",
+    "mern",
+    "industrial-supplies",
+    "ecommerce"
+  ],
+  "author": "OceanR Enterprises",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

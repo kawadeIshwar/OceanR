@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Poppins', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Public pages padding - for pages with TopBar and Navbar */
+.public-layout {
+  padding-top: 100px; /* Space for TopBar + Navbar */
+}
+
+/* Responsive padding for public pages */
+@media (max-width: 1024px) {
+  .public-layout {
+    padding-top: 98px;
+  }
+}
+
+@media (max-width: 768px) {
+  .public-layout {
+    padding-top: 120px;
+  }
+}
+
+@media (max-width: 640px) {
+  .public-layout {
+    padding-top: 130px;
+  }
+}
+
+#root {
+  min-height: 100vh;
+}
+
