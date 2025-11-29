@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+// Use environment variable for API URL, fallback to relative path
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
 });
 
 // Add token to requests if it exists
