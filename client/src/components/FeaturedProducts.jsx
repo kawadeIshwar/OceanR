@@ -13,9 +13,11 @@ const FeaturedProducts = () => {
       try {
         const response = await api.get('/products?featured=true');
         // Limit to 8 products for 2 rows × 4 columns
-        setFeaturedProducts(response.data.slice(0, 8));
+        const products = Array.isArray(response.data) ? response.data : [];
+        setFeaturedProducts(products.slice(0, 8));
       } catch (error) {
         console.error('Error fetching featured products:', error);
+        setFeaturedProducts([]); // Set empty array on error
       } finally {
         setLoading(false);
       }

@@ -21,9 +21,11 @@ const Categories = () => {
     const fetchCategories = async () => {
       try {
         const response = await api.get('/categories');
-        setCategories(response.data);
+        // Ensure we always set an array
+        setCategories(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error('Error fetching categories:', error);
+        setCategories([]); // Set empty array on error
       } finally {
         setLoading(false);
       }

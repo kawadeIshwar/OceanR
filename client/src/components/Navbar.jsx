@@ -33,7 +33,8 @@ const Navbar = () => {
       setSearching(true);
       try {
         const response = await api.get('/products');
-        const filtered = response.data.filter(product =>
+        const products = Array.isArray(response.data) ? response.data : [];
+        const filtered = products.filter(product =>
           product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           product.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
           product.category?.name?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -41,6 +42,7 @@ const Navbar = () => {
         setSearchResults(filtered.slice(0, 5)); // Limit to 5 results
       } catch (error) {
         console.error('Search error:', error);
+        setSearchResults([]); // Set empty array on error
       } finally {
         setSearching(false);
       }

@@ -52,9 +52,10 @@ const Products = () => {
       if (searchTerm) url += `search=${searchTerm}&`;
       
       const response = await api.get(url);
-      setProducts(response.data);
+      setProducts(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching products:', error);
+      setProducts([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
