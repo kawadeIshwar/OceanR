@@ -139,11 +139,11 @@ const ProductDetail = () => {
             </div>
 
             {/* Specifications */}
-            {product.specs && product.specs.size > 0 && (
+            {product.specs && Object.keys(product.specs).length > 0 && (
               <div className="specifications-box">
                 <h3 className="specs-title">Specifications</h3>
                 <div className="specs-table">
-                  {Array.from(product.specs).map(([key, value]) => (
+                  {Object.entries(product.specs).map(([key, value]) => (
                     <div key={key} className="spec-row">
                       <span className="spec-key">{key}</span>
                       <span className="spec-value">{value}</span>
