@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { X, Upload } from 'lucide-react';
 import api from '../../utils/api';
 
@@ -50,7 +51,7 @@ const ProductForm = ({ product, onClose }) => {
           productData.specs = JSON.parse(data.specs);
         } catch (e) {
           console.error('Invalid specs JSON:', e);
-          alert('Invalid JSON format in specifications. Please check and try again.');
+          toast.error('Invalid JSON format in specifications. Please check and try again.');
           setSubmitting(false);
           return;
         }
@@ -68,11 +69,11 @@ const ProductForm = ({ product, onClose }) => {
       if (product) {
         const response = await api.put(`/products/${product._id}`, formData);
         console.log('Product updated:', response.data);
-        alert('Product updated successfully!');
+        toast.success('Product updated successfully!');
       } else {
         const response = await api.post('/products', formData);
         console.log('Product created:', response.data);
-        alert('Product added successfully!');
+        toast.success('Product added successfully!');
       }
 
       onClose();
@@ -93,7 +94,8 @@ const ProductForm = ({ product, onClose }) => {
         errorMessage = error.message;
       }
       
-      alert('Failed to save product:\n\n' + errorMessage + '\n\nCheck browser console (F12) for more details.');
+      toast.error('Failed to save product: ' + errorMessage);
+      console.error('Check browser console for more details.');
     } finally {
       setSubmitting(false);
     }

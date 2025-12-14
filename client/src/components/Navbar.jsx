@@ -195,7 +195,7 @@ const Navbar = () => {
               Get a Quote
             </Link>
             <div className="mobile-contact-info">
-              <a href="tel:+919766652205">+91 9766652205</a>
+              <a href="tel:+917620980794">+91 7620980794</a>
               <a href="mailto:oceanrenterprises@gmail.com">oceanrenterprises@gmail.com</a>
             </div>
           </div>

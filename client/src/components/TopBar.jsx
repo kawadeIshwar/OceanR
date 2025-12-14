@@ -7,9 +7,9 @@ const TopBar = () => {
       <div className="top-bar-container">
         {/* Left - Contact Info */}
         <div className="top-bar-left">
-          <a href="tel:+919766652205" className="top-bar-item">
+          <a href="tel:+917620980794" className="top-bar-item">
             <Phone size={14} strokeWidth={2.5} />
-            <span>+91 9766652205</span>
+            <span>+91 7620980794</span>
           </a>
           <a href="mailto:oceanrenterprises@gmail.com" className="top-bar-item">
             <Mail size={14} strokeWidth={2.5} />

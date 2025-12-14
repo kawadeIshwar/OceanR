@@ -10,8 +10,7 @@ import ScrollAnimation from '../components/ScrollAnimation';
 import './About.css';
 
 const About = () => {
-  const [activeValue, setActiveValue] = useState(0);
-  const [isHoveringValues, setIsHoveringValues] = useState(false);
+  const [hoveredValue, setHoveredValue] = useState(null);
   const [stats, setStats] = useState({
     experience: 0,
     clients: 0,
@@ -54,15 +53,6 @@ const About = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Auto-rotate values (pause when hovering)
-  useEffect(() => {
-    if (isHoveringValues) return; // Don't rotate while hovering
-    
-    const interval = setInterval(() => {
-      setActiveValue((prev) => (prev + 1) % 4);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [isHoveringValues]);
 
   const coreValues = [
     {
@@ -240,14 +230,9 @@ const About = () => {
               return (
                 <div 
                   key={index}
-                  className={`value-card ${activeValue === index ? 'active' : ''}`}
-                  onMouseEnter={() => {
-                    setIsHoveringValues(true);
-                    setActiveValue(index);
-                  }}
-                  onMouseLeave={() => {
-                    setIsHoveringValues(false);
-                  }}
+                  className={`value-card ${hoveredValue === index ? 'active' : ''}`}
+                  onMouseEnter={() => setHoveredValue(index)}
+                  onMouseLeave={() => setHoveredValue(null)}
                 >
                   <div className="value-icon" style={{ '--icon-color': value.color }}>
                     <Icon size={36} />
@@ -405,13 +390,13 @@ const About = () => {
           {/* Contact Information Cards */}
           <div className="contact-info-grid">
             {/* Call Us Card */}
-            <a href="tel:+919766652205" className="info-card call-card">
+            <a href="tel:+917620980794" className="info-card call-card">
               <div className="info-card-icon">
                 <Phone size={28} />
               </div>
               <div className="info-card-content">
                 <h4>Call Us</h4>
-                <p className="info-highlight">+91 9766652205</p>
+                <p className="info-highlight">+91 7620980794</p>
                 <span className="info-subtitle">Mon-Sat, 9 AM - 6 PM</span>
               </div>
               <div className="card-arrow">

@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Phone, Mail, MapPin, CheckCircle, Building2, Briefcase, Clock, Send } from 'lucide-react';
 import ScrollAnimation from '../components/ScrollAnimation';
 import api from '../utils/api';
@@ -24,7 +25,7 @@ const Contact = () => {
       setTimeout(() => setSubmitted(false), 5000);
     } catch (error) {
       console.error('Error submitting contact form:', error);
-      alert('Failed to submit. Please try again.');
+      toast.error('Failed to submit. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -62,8 +63,8 @@ const Contact = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-lg mb-2 text-gray-900">Phone Support</h3>
-                    <a href="tel:+919766652205" className="text-blue-600 hover:text-blue-700 font-semibold text-lg block mb-1">
-                      +91 9766652205
+                    <a href="tel:+917620980794" className="text-blue-600 hover:text-blue-700 font-semibold text-lg block mb-1">
+                      +91 7620980794
                     </a>
                     <p className="text-sm text-gray-500">Mon-Sat, 9AM-6PM IST</p>
                   </div>

@@ -12,11 +12,11 @@ const Home = () => {
       {/* Hero Section */}
       <Hero />
 
-      {/* Categories Section */}
-      <Categories />
-
       {/* Featured Products Section */}
       <FeaturedProducts />
+
+      {/* Categories Section */}
+      <Categories />
 
       {/* Why Choose Us Section */}
       <WhyChooseUs />

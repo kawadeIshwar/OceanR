@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { Plus, Edit, Trash2, FolderTree, X, Save, Package } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import api from '../../utils/api';
@@ -39,7 +40,7 @@ const CategoriesManagement = () => {
       setCategories(categories.filter((c) => c._id !== id));
     } catch (error) {
       console.error('Error deleting category:', error);
-      alert('Failed to delete category');
+      toast.error('Failed to delete category');
     }
   };
 
@@ -60,9 +61,10 @@ const CategoriesManagement = () => {
       setEditingCategory(null);
       reset();
       fetchCategories();
+      toast.success(editingCategory ? 'Category updated successfully!' : 'Category created successfully!');
     } catch (error) {
       console.error('Error saving category:', error);
-      alert('Failed to save category: ' + (error.response?.data?.message || error.message));
+      toast.error('Failed to save category: ' + (error.response?.data?.message || error.message));
     }
   };
 

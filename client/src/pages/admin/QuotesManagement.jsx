@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { MessageSquare, Mail, Phone, Building, Trash2, Filter, Search, Calendar, User, Briefcase, DollarSign, FileText, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 import api from '../../utils/api';
 
@@ -56,9 +57,10 @@ const QuotesManagement = () => {
     try {
       await api.delete(`/quotes/${id}`);
       setQuotes(quotes.filter((q) => q._id !== id));
+      toast.success('Quote request deleted successfully!');
     } catch (error) {
       console.error('Error deleting quote:', error);
-      alert('Failed to delete quote request');
+      toast.error('Failed to delete quote request');
     }
   };
 
@@ -68,9 +70,10 @@ const QuotesManagement = () => {
       setQuotes(
         quotes.map((q) => (q._id === id ? { ...q, status } : q))
       );
+      toast.success('Status updated successfully!');
     } catch (error) {
       console.error('Error updating status:', error);
-      alert('Failed to update status');
+      toast.error('Failed to update status');
     }
   };
 

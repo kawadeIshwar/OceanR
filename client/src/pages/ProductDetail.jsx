@@ -28,7 +28,7 @@ const ProductDetail = () => {
 
   // Contact handlers
   const handleWhatsApp = () => {
-    const phoneNumber = '9766652205'; // Replace with your WhatsApp number
+    const phoneNumber = '7620980794'; // Replace with your WhatsApp number
     const message = `Hello, I'm interested in the product ${product.name}. Could you please share detailed information about its features, specifications, pricing, and delivery options?`;
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');

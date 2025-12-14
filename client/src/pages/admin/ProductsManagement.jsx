@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { Plus, Edit, Trash2, Package, Search, Filter, Star, Eye } from 'lucide-react';
 import api from '../../utils/api';
 import ProductForm from '../../components/admin/ProductForm';
@@ -76,9 +77,10 @@ const ProductsManagement = () => {
     try {
       await api.delete(`/products/${id}`);
       setProducts(products.filter((p) => p._id !== id));
+      toast.success('Product deleted successfully!');
     } catch (error) {
       console.error('Error deleting product:', error);
-      alert('Failed to delete product');
+      toast.error('Failed to delete product');
     }
   };
 
