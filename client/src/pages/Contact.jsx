@@ -111,7 +111,7 @@ const Contact = () => {
                 <div className="space-y-4">
                   <div>
                     <p className="text-sm text-gray-400 mb-1 uppercase tracking-wider">Contact Person</p>
-                    <p className="text-lg font-semibold">MR. Aryan Bhosale</p>
+                    <p className="text-lg font-semibold">MR. Aryan</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-400 mb-1 uppercase tracking-wider">GSTIN</p>

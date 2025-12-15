@@ -471,11 +471,11 @@
 
 @media (max-width: 768px) {
   .navbar {
-    top: 50px; /* Adjusted for stacked top bar items */
+    top: 44px; /* Adjusted for stacked top bar items */
   }
 
   .navbar-container {
-    padding: 0.5rem 1.5rem;
+    padding: 0.875rem 1.5rem;
   }
 
   .brand-logo {
@@ -499,11 +499,11 @@
 
 @media (max-width: 640px) {
   .navbar {
-    top: 60px; /* Adjusted for vertical stacked top bar */
+    top: 44px; /* Adjusted for vertical stacked top bar */
   }
 
   .navbar-container {
-    padding: 0.5rem 1.25rem;
+    padding: 0.875rem 1.25rem;
   }
 
   .brand-logo {
@@ -763,6 +763,7 @@
   margin: 0 0 0.25rem 0;
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

@@ -81,7 +81,7 @@ const Footer = () => {
               <li>
                 <span className="font-semibold text-white">Contact Person:</span>
                 <br />
-                MR. Aryan Bhosale
+                MR. Aryan
               </li>
               <li>
                 <span className="font-semibold text-white">GSTIN:</span>

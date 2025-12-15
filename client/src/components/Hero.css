@@ -295,7 +295,7 @@
 }
 
 .metric {
-  text-align: left;
+  text-align: center;
 }
 
 .metric-value {
@@ -953,12 +953,13 @@
   }
 
   .hero-container {
-    padding: 3rem 1.5rem 2rem;
+    padding: 2rem 1.5rem 2rem;
     gap: 2.5rem;
   }
 
   .hero-mega-title {
     font-size: 3rem;
+    text-align: center;
   }
 
   .hero-label {
@@ -984,7 +985,7 @@
   .hero-tagline-text {
     font-size: 1rem;
     margin-bottom: 2rem;
-    text-align: justify;
+    text-align: center;
   }
 
   .hero-actions {
@@ -1000,7 +1001,7 @@
   }
 
   .hero-metrics {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
     padding-top: 1.25rem;
   }
@@ -1085,9 +1086,10 @@
   }
 
   .hero-mega-title {
-    font-size: 2.25rem;
+    font-size: 2.75rem;
     line-height: 1;
     margin-bottom: 1.25rem;
+    text-align: center;
   }
 
   .brand-name {
@@ -1102,7 +1104,7 @@
   .hero-tagline-text {
     font-size: 0.875rem;
     margin-bottom: 1.75rem;
-    text-align: justify;
+    text-align: center;
   }
 
   .action-btn {
@@ -1111,14 +1113,9 @@
   }
 
   .hero-metrics {
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
     padding-top: 1.25rem;
-  }
-
-  .metric:last-child {
-    grid-column: 1 / -1;
-    text-align: center;
   }
 
   .metric-value {
@@ -1182,7 +1179,7 @@
 
   .feature-strip-container {
     padding: 0 1.25rem;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
 
@@ -1217,7 +1214,8 @@
   }
 
   .hero-mega-title {
-    font-size: 1.875rem;
+    font-size: 2.25rem;
+    text-align: center;
   }
 
   .brand-name {
@@ -1236,16 +1234,12 @@
   }
 
   .hero-metrics {
-    grid-template-columns: 1fr;
-  }
-
-  .metric:last-child {
-    grid-column: auto;
-    text-align: left;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
   }
 
   .metric-value {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
   }
 
   .feature-strip-modern {
@@ -1254,7 +1248,7 @@
 
   .feature-strip-container {
     padding: 0 1rem;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
 

@@ -35,13 +35,13 @@ body {
 
 @media (max-width: 768px) {
   .public-layout {
-    padding-top: 120px;
+    padding-top: 104px;
   }
 }
 
 @media (max-width: 640px) {
   .public-layout {
-    padding-top: 130px;
+    padding-top: 96px;
   }
 }
 
