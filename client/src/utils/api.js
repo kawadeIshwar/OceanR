@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// Use environment variable for API URL, fallback to relative path
+// Use environment variable for API URL, fallback to production backend
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://oceanr.onrender.com',
 });
 
 // Add token to requests if it exists
