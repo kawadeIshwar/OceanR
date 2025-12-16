@@ -9,11 +9,13 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <img 
-                src="/oceanr logo.png" 
-                alt="OceanR Enterprises Logo" 
-                className="h-20 w-auto"
-              />
+              <div className="bg-white rounded-lg p-2 flex items-center justify-center">
+                <img 
+                  src="/oceanr logo.png" 
+                  alt="OceanR Enterprises Logo" 
+                  className="h-16 w-auto"
+                />
+              </div>
               <h3 className="text-xl font-black text-primary-400">
                 OCEANR ENTERPRISES
               </h3>
