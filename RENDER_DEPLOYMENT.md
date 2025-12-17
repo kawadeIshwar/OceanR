@@ -96,7 +96,7 @@ Before deploying, ensure you have:
 5. **Create Web Service**
    - Click **"Create Web Service"**
    - Wait for initial deployment (5-10 minutes)
-   - Your API will be live at: `https://oceanr-api.onrender.com`
+   - ✅ Your API is live at: `https://oceanr-api.onrender.com`
 
 ## 🔑 Setting Up Required Credentials
 
@@ -156,7 +156,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 Check if your API is running:
 
 ```bash
-curl https://your-service-name.onrender.com/api/health
+curl https://oceanr-api.onrender.com/api/health
 ```
 
 Expected response:
@@ -203,14 +203,14 @@ Update your frontend to use the Render API URL:
 In `client/src/utils/api.js`:
 ```javascript
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://your-service-name.onrender.com',
+  baseURL: import.meta.env.VITE_API_URL || 'https://oceanr-api.onrender.com',
   // ... rest of config
 });
 ```
 
 Set environment variable in your frontend hosting (Netlify/Vercel):
 ```
-VITE_API_URL=https://your-service-name.onrender.com
+VITE_API_URL=https://oceanr-api.onrender.com/api
 ```
 
 ## 🔄 Auto-Deploy on Git Push
@@ -355,6 +355,11 @@ Render will:
 
 **Your backend is now deployed on Render! 🎉**
 
-**API URL**: `https://your-service-name.onrender.com`
+**API URL**: `https://oceanr-api.onrender.com`
 
-Next step: Deploy your frontend and connect it to this API URL.
+**Next Steps:**
+1. Copy `.env.example` to `.env` in the client folder (if not already done)
+2. Ensure VITE_API_URL is set to `https://oceanr-api.onrender.com/api`
+3. Test the API health endpoint
+4. Seed your database with initial data
+5. Deploy your frontend to Netlify/Vercel
