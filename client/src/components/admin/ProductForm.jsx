@@ -8,19 +8,55 @@ const ProductForm = ({ product, onClose }) => {
   const [categories, setCategories] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [imageFiles, setImageFiles] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
-    defaultValues: product || {},
-  });
+  } = useForm();
 
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  // Reset form when product data is available
+  useEffect(() => {
+    if (product && categories.length > 0) {
+      // Handle specs conversion (could be Map or plain object)
+      let specsString = '';
+      if (product.specs) {
+        if (product.specs instanceof Map) {
+          specsString = JSON.stringify(Object.fromEntries(product.specs), null, 2);
+        } else if (typeof product.specs === 'object') {
+          specsString = JSON.stringify(product.specs, null, 2);
+        }
+      }
+
+      // Set existing images
+      setExistingImages(product.images || []);
+
+      const formValues = {
+        name: product.name || '',
+        description: product.description || '',
+        category: product.category?._id || product.category || '',
+        featured: product.featured || false,
+        specs: specsString,
+      };
+      reset(formValues);
+    } else if (!product && categories.length > 0) {
+      // Reset to empty form for new product
+      setExistingImages([]);
+      reset({
+        name: '',
+        description: '',
+        category: '',
+        featured: false,
+        specs: '',
+      });
+    }
+  }, [product, categories, reset]);
 
   const fetchCategories = async () => {
     try {
@@ -57,10 +93,15 @@ const ProductForm = ({ product, onClose }) => {
         }
       }
 
+      // For editing, only replace images if new ones are uploaded
+      if (product && imageFiles.length > 0) {
+        productData.replaceImages = true; // Flag to replace all images
+      }
+
       console.log('Product Data:', productData);
       formData.append('data', JSON.stringify(productData));
 
-      // Add images
+      // Add new images if any
       imageFiles.forEach((file) => {
         formData.append('images', file);
       });
@@ -210,6 +251,33 @@ const ProductForm = ({ product, onClose }) => {
             <label className="block text-sm font-bold mb-2 text-gray-700">
               Product Images
             </label>
+            
+            {/* Show existing images when editing */}
+            {product && existingImages.length > 0 && (
+              <div className="mb-4">
+                <p className="text-sm text-gray-600 mb-2">Current Images:</p>
+                <div className="grid grid-cols-3 gap-2 mb-4">
+                  {existingImages.map((image, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={image}
+                        alt={`Current product image ${index + 1}`}
+                        className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
+                      />
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                        <span className="text-white text-xs">Image {index + 1}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                  <p className="text-xs text-yellow-800">
+                    <strong>Note:</strong> Upload new images to replace all current images. If no new images are uploaded, existing images will be preserved.
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="border-2 border-dashed border-blue-300 rounded-xl p-6 text-center bg-blue-50/30 hover:bg-blue-50 transition-colors">
               <input
                 type="file"
@@ -224,12 +292,12 @@ const ProductForm = ({ product, onClose }) => {
                   <Upload className="text-blue-600" size={32} />
                 </div>
                 <p className="text-sm font-semibold text-gray-700 mb-1">
-                  Click to upload product images
+                  {product ? 'Upload new images to replace current ones' : 'Click to upload product images'}
                 </p>
                 <p className="text-xs text-gray-500">Maximum 5 images, JPG or PNG</p>
                 {imageFiles.length > 0 && (
                   <p className="text-sm text-blue-600 font-bold mt-3 bg-white px-4 py-2 rounded-lg inline-block">
-                    ✓ {imageFiles.length} file(s) selected
+                    ✓ {imageFiles.length} new file(s) selected - This will replace all current images
                   </p>
                 )}
               </label>

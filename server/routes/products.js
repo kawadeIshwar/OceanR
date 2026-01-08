@@ -70,6 +70,7 @@ router.post(
   upload.fields([
     { name: 'images', maxCount: 5 },
   ]),
+  validateProduct,
   async (req, res) => {
     try {
       console.log('Received product creation request');
@@ -109,6 +110,7 @@ router.post(
       }
 
       // Prepare product data for creation
+      console.log('Original specs:', productData.specs);
       const finalProductData = {
         name: productData.name,
         description: productData.description,
@@ -117,6 +119,7 @@ router.post(
         specs: productData.specs || {},
         images: imageUrls,
       };
+      console.log('Final product data specs:', finalProductData.specs);
 
       console.log('Creating product with data:', finalProductData);
       const product = await Product.create(finalProductData);
@@ -156,6 +159,7 @@ router.put(
   upload.fields([
     { name: 'images', maxCount: 5 },
   ]),
+  validateProduct,
   async (req, res) => {
     try {
       const product = await Product.findById(req.params.id);
@@ -167,7 +171,7 @@ router.put(
       const productData = JSON.parse(req.body.data || '{}');
 
       // Upload new images if provided
-      if (req.files?.images) {
+      if (req.files?.images && productData.replaceImages) {
         const imageUrls = [];
         for (const file of req.files.images) {
           const result = await new Promise((resolve, reject) => {
@@ -185,7 +189,14 @@ router.put(
         productData.images = imageUrls;
       }
 
-      Object.assign(product, productData);
+      // Update other fields
+      if (productData.name) product.name = productData.name;
+      if (productData.description) product.description = productData.description;
+      if (productData.category) product.category = productData.category;
+      if (productData.featured !== undefined) product.featured = productData.featured;
+      if (productData.images) product.images = productData.images;
+      if (productData.specs) product.specs = productData.specs;
+
       await product.save();
 
       const updatedProduct = await Product.findById(product._id).populate('category', 'name');

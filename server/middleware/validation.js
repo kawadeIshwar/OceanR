@@ -1,6 +1,18 @@
 import Joi from 'joi';
 
 export const validateProduct = (req, res, next) => {
+  // Handle FormData requests (with file uploads)
+  let dataToValidate;
+  if (req.body.data) {
+    try {
+      dataToValidate = JSON.parse(req.body.data);
+    } catch (error) {
+      return res.status(400).json({ message: 'Invalid JSON in product data' });
+    }
+  } else {
+    dataToValidate = req.body;
+  }
+
   const schema = Joi.object({
     name: Joi.string().required(),
     SKU: Joi.string().allow('', null),
@@ -12,7 +24,7 @@ export const validateProduct = (req, res, next) => {
     featured: Joi.boolean(),
   });
 
-  const { error } = schema.validate(req.body);
+  const { error } = schema.validate(dataToValidate);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }

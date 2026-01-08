@@ -10,6 +10,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [imageZoom, setImageZoom] = useState(false);
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     fetchProduct();
@@ -118,42 +119,8 @@ const ProductDetail = () => {
                 ))}
               </div>
             )}
-          </div>
 
-          {/* Right Side - Product Info & Actions */}
-          <div className="product-info-section">
-            {/* Product Header */}
-            <div className="product-header">
-              {product.category && (
-                <Link to={`/products?category=${product.category._id}`} className="product-category-badge">
-                  {product.category.name}
-                </Link>
-              )}
-              <h1 className="product-title">{product.name}</h1>
-            </div>
-
-            {/* Product Description */}
-            <div className="product-description-box">
-              <h3 className="description-title">Product Description</h3>
-              <p className="product-description">{product.description}</p>
-            </div>
-
-            {/* Specifications */}
-            {product.specs && Object.keys(product.specs).length > 0 && (
-              <div className="specifications-box">
-                <h3 className="specs-title">Specifications</h3>
-                <div className="specs-table">
-                  {Object.entries(product.specs).map(([key, value]) => (
-                    <div key={key} className="spec-row">
-                      <span className="spec-key">{key}</span>
-                      <span className="spec-value">{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Inquiry Section */}
+            {/* Inquiry Section - Moved Below Image */}
             <div className="inquiry-section">
               <div className="inquiry-header">
                 <CheckCircle2 className="inquiry-icon" size={24} />
@@ -202,6 +169,52 @@ const ProductDetail = () => {
                 </button>
               </div>
             </div>
+          </div>
+
+          {/* Right Side - Product Info & Actions */}
+          <div className="product-info-section">
+            {/* Product Header */}
+            <div className="product-header">
+              {product.category && (
+                <Link to={`/products?category=${product.category._id}`} className="product-category-badge">
+                  {product.category.name}
+                </Link>
+              )}
+              <h1 className="product-title">{product.name}</h1>
+            </div>
+
+            {/* Product Description */}
+            <div className="product-description-box">
+              <h3 className="description-title">Product Description</h3>
+              <div className="description-content">
+                <p className={`product-description ${showFullDescription ? 'expanded' : 'collapsed'}`}>
+                  {product.description}
+                </p>
+                {product.description && product.description.length > 200 && (
+                  <button 
+                    className={`see-more-btn ${showFullDescription ? 'expanded' : ''}`}
+                    onClick={() => setShowFullDescription(!showFullDescription)}
+                  >
+                    {showFullDescription ? 'See Less' : 'See More'}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Specifications */}
+            {product.specs && Object.keys(product.specs).length > 0 && (
+              <div className="specifications-box">
+                <h3 className="specs-title">Specifications</h3>
+                <div className="specs-table">
+                  {Object.entries(product.specs).map(([key, value]) => (
+                    <div key={key} className="spec-row">
+                      <span className="spec-key">{key}</span>
+                      <span className="spec-value">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Download Datasheet */}
             {product.datasheet && (

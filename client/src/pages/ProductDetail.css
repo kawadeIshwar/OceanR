@@ -293,6 +293,52 @@
   line-height: 1.8;
   color: #475569;
   margin: 0;
+  transition: all 0.3s ease;
+}
+
+.product-description.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 5.4em; /* 3 lines * 1.8 line-height */
+}
+
+.product-description.expanded {
+  display: block;
+  max-height: none;
+}
+
+.description-content {
+  position: relative;
+}
+
+.see-more-btn {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-weight: 600;
+  font-size: 0.938rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-top: 0.75rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: block;
+  text-align: right;
+}
+
+.see-more-btn:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.see-more-btn:focus {
+  /* outline: 2px solid #3b82f6; */
+  /* outline-offset: 2px; */
+  border-radius: 2px;
 }
 
 /* Specifications Box */
@@ -371,7 +417,7 @@
   flex-shrink: 0;
   width: 24px;
   height: 24px;
-  animation: pulse 2s ease-in-out infinite;
+  /* animation: pulse 2s ease-in-out infinite; */
 }
 
 .inquiry-title {
@@ -419,12 +465,13 @@
 }
 
 .inquiry-btn:hover {
-  transform: translateY(-4px);
+  /* transform: translateY(-4px); */
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
 }
 
 .inquiry-btn:active {
-  transform: translateY(-2px) scale(0.98);
+  /* transform: translateY(-2px) scale(0.98); */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 /* WhatsApp Button */
@@ -513,7 +560,7 @@
 }
 
 .inquiry-btn:hover .inquiry-btn-icon {
-  transform: scale(1.1) rotate(-5deg);
+  /* transform: scale(1.1); */
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 

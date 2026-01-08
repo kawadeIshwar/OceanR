@@ -22,8 +22,8 @@ const productSchema = new mongoose.Schema(
       },
     ],
     specs: {
-      type: Map,
-      of: String,
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
     },
     featured: {
       type: Boolean,

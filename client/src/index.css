@@ -49,3 +49,47 @@ body {
   min-height: 100vh;
 }
 
+/* Mobile text alignment - left align all text content on mobile */
+@media (max-width: 768px) {
+  * {
+    text-align: left !important;
+  }
+  
+  /* Exceptions for elements that should remain centered */
+  .text-center,
+  [class*="text-center"],
+  .hero-title,
+  .hero-mega-title,
+  .product-title,
+  .section-title,
+  .modal-title,
+  .toast,
+  .loading-container,
+  .not-found-container,
+  .pagination,
+  .btn-group,
+  .nav-item,
+  .footer-social,
+  .stats-grid,
+  .metrics,
+  .cta-buttons,
+  .form-actions,
+  button,
+  input[type="submit"],
+  input[type="button"] {
+    text-align: center !important;
+  }
+  
+  /* Specific centering for navigation and UI elements */
+  nav,
+  .navbar,
+  .mobile-menu,
+  .mobile-nav,
+  .breadcrumb,
+  .progress-bar,
+  .slider,
+  .carousel {
+    text-align: center !important;
+  }
+}
+

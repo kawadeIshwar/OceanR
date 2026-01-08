@@ -395,7 +395,7 @@
 
   .why-choose-subtitle {
     font-size: 16px;
-    text-align: justify;
+    text-align: left;
   }
 
   .why-features-grid {
@@ -408,7 +408,7 @@
   }
 
   .feature-description {
-    text-align: justify;
+    text-align: left;
   }
 
   .feature-icon-container {
@@ -486,7 +486,7 @@
 
   .why-choose-subtitle {
     font-size: 15px;
-    text-align: justify;
+    text-align: left;
   }
 
   .why-features-grid {
@@ -499,7 +499,7 @@
   }
 
   .feature-description {
-    text-align: justify;
+    text-align: left;
   }
 
   .feature-icon-container {
@@ -574,7 +574,7 @@
 
   .why-choose-subtitle {
     font-size: 14px;
-    text-align: justify;
+    text-align: left;
   }
 
   .feature-title {
@@ -583,7 +583,7 @@
 
   .feature-description {
     font-size: 12px;
-    text-align: justify;
+    text-align: left;
   }
 
   .why-feature-card {
