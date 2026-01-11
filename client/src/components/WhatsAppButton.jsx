@@ -3,7 +3,7 @@ import './WhatsAppButton.css';
 
 const WhatsAppButton = () => {
   // Replace with your actual WhatsApp number (with country code, no + or spaces)
-  const phoneNumber = '919876543210'; // Example: 919876543210 for India
+  const phoneNumber = '917620980794'; // Example: 919876543210 for India
   const message = 'Hello! I would like to inquire about your products.';
   
   const handleClick = () => {

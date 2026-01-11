@@ -439,7 +439,7 @@ const About = () => {
               </div>
               <div className="info-card-content">
                 <h4>Contact Person</h4>
-                <p className="info-highlight">MR. Aryan</p>
+                <p className="info-highlight">Mr. Aryan</p>
                 <span className="info-subtitle">Business Manager</span>
               </div>
               <div className="card-status">
