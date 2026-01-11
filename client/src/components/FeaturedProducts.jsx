@@ -88,10 +88,6 @@ const FeaturedProducts = () => {
                 <Link to={`/products/${product._id}`} className="product-name-link">
                   <h3 className="product-name">{product.name}</h3>
                 </Link>
-                
-                {product.description && (
-                  <p className="product-description">{product.description}</p>
-                )}
               </div>
             </div>
           ))}

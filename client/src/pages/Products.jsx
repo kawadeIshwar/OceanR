@@ -270,7 +270,6 @@ const Products = () => {
                             {product.category.name}
                           </span>
                         )}
-                        <p className="product-description">{product.description}</p>
                       </div>
                     </Link>
                   ))}

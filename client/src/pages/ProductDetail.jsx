@@ -187,16 +187,28 @@ const ProductDetail = () => {
             <div className="product-description-box">
               <h3 className="description-title">Product Description</h3>
               <div className="description-content">
-                <p className={`product-description ${showFullDescription ? 'expanded' : 'collapsed'}`}>
-                  {product.description}
-                </p>
-                {product.description && product.description.length > 200 && (
-                  <button 
-                    className={`see-more-btn ${showFullDescription ? 'expanded' : ''}`}
-                    onClick={() => setShowFullDescription(!showFullDescription)}
-                  >
-                    {showFullDescription ? 'See Less' : 'See More'}
-                  </button>
+                {product.description ? (
+                  <>
+                    <p 
+                      className={`product-description ${showFullDescription ? 'expanded' : 'collapsed'}`}
+                      style={{display: 'block', visibility: 'visible', opacity: '1'}}
+                    >
+                      {product.description}
+                    </p>
+                    {product.description.length > 150 && (
+                      <button 
+                        className={`see-more-btn ${showFullDescription ? 'expanded' : ''}`}
+                        onClick={() => setShowFullDescription(!showFullDescription)}
+                        style={{display: 'inline-block', visibility: 'visible'}}
+                      >
+                        {showFullDescription ? 'See Less' : 'See More'}
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <p className="product-description no-description" style={{display: 'block', visibility: 'visible'}}>
+                    No description available for this product.
+                  </p>
                 )}
               </div>
             </div>

@@ -17,7 +17,7 @@
 /* Hero Section */
 .hero-section {
   position: relative;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   background: #fafafa;
   padding: 0;
   overflow: hidden;
