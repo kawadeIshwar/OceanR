@@ -374,7 +374,7 @@ OCEANR/
 ## 🎯 Business Information
 
 **Company:** OceanR Enterprises  
-**Contact Person:** MR. Aryan  
+**Contact Person:** Mr. Aryan  
 **Phone:** +91 7620980794  
 **Email:** oceanrenterprises@gmail.com  
 **GSTIN:** 27AABFO9331N1ZC  

@@ -44,7 +44,7 @@ const ProductDetail = () => {
   };
 
   const handleCall = () => {
-    const phoneNumber = '+1234567890'; // Replace with your phone number
+    const phoneNumber = '+917620980794'; // Replace with your phone number
     window.location.href = `tel:${phoneNumber}`;
   };
 
