@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { Phone, Mail, MapPin, CheckCircle, Building2, Briefcase, Clock, Send } from 'lucide-react';
 import ScrollAnimation from '../components/ScrollAnimation';
-import api from '../utils/api';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -19,13 +19,31 @@ const Contact = () => {
   const onSubmit = async (data) => {
     setSubmitting(true);
     try {
-      await api.post('/quotes', data);
+      const templateParams = {
+        to_name: 'OceanR Team',
+        from_name: data.name,
+        from_email: data.email,
+        phone: data.phone,
+        company: data.company,
+        industry: data.industry,
+        inquiry_type: data.inquiryType,
+        message: data.message,
+        budget: data.budget || 'Not specified'
+      };
+
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
       setSubmitted(true);
       reset();
       setTimeout(() => setSubmitted(false), 5000);
     } catch (error) {
-      console.error('Error submitting contact form:', error);
-      toast.error('Failed to submit. Please try again.');
+      console.error('Error sending email:', error);
+      toast.error('Failed to send message. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -217,7 +235,7 @@ const Contact = () => {
                         type="tel"
                         {...register('phone', { required: 'Phone number is required' })}
                         className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                        placeholder="+91 98765 43210"
+                        placeholder="+91 XXXXXXXXXX"
                       />
                       {errors.phone && (
                         <p className="mt-2 text-sm text-red-600 font-medium">{errors.phone.message}</p>
