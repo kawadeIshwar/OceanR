@@ -106,6 +106,15 @@ const ProductDetail = () => {
               )}
             </div>
 
+            <div className="product-header mobile-product-header">
+              {product.category && (
+                <Link to={`/products?category=${product.category._id}`} className="product-category-badge">
+                  {product.category.name}
+                </Link>
+              )}
+              <h1 className="product-title">{product.name}</h1>
+            </div>
+
             {product.images?.length > 1 && (
               <div className="thumbnail-gallery">
                 {product.images.map((image, index) => (

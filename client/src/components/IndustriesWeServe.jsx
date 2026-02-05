@@ -6,13 +6,13 @@ const IndustriesWeServe = () => {
       title: 'Manufacturing',
       description: 'Comprehensive supply solutions for production facilities and assembly lines',
       gradient: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-      image: 'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?w=600&auto=format&fit=crop'
+      image: 'https://images.unsplash.com/photo-1717386255773-1e3037c81788?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     },
     {
       title: 'Automotive',
       description: 'Precision tools and parts for automotive repair and maintenance shops',
       gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-      image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=600&auto=format&fit=crop'
+      image: 'https://images.unsplash.com/photo-1647427060118-4911c9821b82?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXV0b21vdGl2ZSUyMGluZHVzdHJ5fGVufDB8fDB8fHww'
     },
     {
       title: 'Construction',
@@ -24,7 +24,7 @@ const IndustriesWeServe = () => {
       title: 'Oil & Gas',
       description: 'Specialized industrial supplies for energy sector operations',
       gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-      image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop'
+      image: 'https://plus.unsplash.com/premium_photo-1682144333631-eac578433ea1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fG9pbCUyMGFuZCUyMGdhcyUyMGluZHVzdHJ5fGVufDB8fDB8fHww'
     },
     {
       title: 'Electronics',
@@ -42,13 +42,13 @@ const IndustriesWeServe = () => {
       title: 'Maintenance',
       description: 'Complete maintenance solutions for facilities and infrastructure',
       gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-      image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&auto=format&fit=crop'
+      image: 'https://plus.unsplash.com/premium_photo-1677009539185-8598a042bb8c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8bWFpbnRhaW5lbmNlJTIwaW5kdXN0cnl8ZW58MHx8MHx8fDA%3D'
     },
     {
       title: 'Power & Energy',
       description: 'Electrical supplies and power distribution equipment',
       gradient: 'linear-gradient(135deg, #eab308 0%, #ca8a04 100%)',
-      image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600&auto=format&fit=crop'
+      image: 'https://plus.unsplash.com/premium_photo-1764702288851-aabac8f8070f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8cG93ZXIlMjBhbmQlMjBlbmVyZ3klMjBpbmR1c3RyeXxlbnwwfHwwfHx8MA%3D%3D'
     }
   ];
 
