@@ -27,6 +27,8 @@ const adminUserSchema = new mongoose.Schema(
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+    otpCode: String,
+    otpExpire: Date,
   },
   {
     timestamps: true,
@@ -64,6 +66,38 @@ adminUserSchema.methods.getResetPasswordToken = function () {
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
+};
+
+// Generate OTP for password reset
+adminUserSchema.methods.generateOTP = function () {
+  // Generate 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  
+  // Set OTP and expiry (10 minutes)
+  this.otpCode = crypto
+    .createHash('sha256')
+    .update(otp)
+    .digest('hex');
+  
+  this.otpExpire = Date.now() + 10 * 60 * 1000;
+  
+  return otp;
+};
+
+// Verify OTP
+adminUserSchema.methods.verifyOTP = function (candidateOTP) {
+  const hashedOTP = crypto
+    .createHash('sha256')
+    .update(candidateOTP)
+    .digest('hex');
+  
+  return this.otpCode === hashedOTP && this.otpExpire > Date.now();
+};
+
+// Clear OTP fields
+adminUserSchema.methods.clearOTP = function () {
+  this.otpCode = undefined;
+  this.otpExpire = undefined;
 };
 
 const AdminUser = mongoose.model('AdminUser', adminUserSchema);

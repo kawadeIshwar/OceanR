@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Phone, Mail, MapPin, CheckCircle, Building2, Briefcase, Clock, Send } from 'lucide-react';
 import ScrollAnimation from '../components/ScrollAnimation';
@@ -8,6 +8,11 @@ import emailjs from '@emailjs/browser';
 const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+  }, []);
 
   const {
     register,
@@ -19,6 +24,13 @@ const Contact = () => {
   const onSubmit = async (data) => {
     setSubmitting(true);
     try {
+      // Debug: Check if environment variables are loaded
+      console.log('Environment variables:', {
+        serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      });
+
       const templateParams = {
         to_name: 'OceanR Team',
         from_name: data.name,
@@ -31,15 +43,17 @@ const Contact = () => {
         budget: data.budget || 'Not specified'
       };
 
+      // Temporarily hardcoded for testing
       await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        'service_7ria3hi',
+        'template_7x1owqb',
         templateParams,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        'xgR36pTh_ngS2sRMa'
       );
 
       setSubmitted(true);
       reset();
+      toast.success('Message sent successfully! We\'ll get back to you within 24 hours.');
       setTimeout(() => setSubmitted(false), 5000);
     } catch (error) {
       console.error('Error sending email:', error);
@@ -72,8 +86,8 @@ const Contact = () => {
       <section className="py-12 relative z-20">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {/* Contact Information Cards - Enhanced */}
-            <div className="lg:col-span-1 space-y-5">
+            {/* Contact Information Cards - On Left for Desktop */}
+            <div className="lg:col-span-1 order-2 lg:order-1 space-y-5">
               <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-start gap-4">
                   <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
@@ -157,8 +171,8 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Enhanced Contact Form */}
-            <div className="lg:col-span-2">
+            {/* Contact Form - On Right for Desktop, Top for Mobile */}
+            <div className="lg:col-span-2 order-1 lg:order-2">
               <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100">
                 <div className="mb-8">
                   <h2 className="text-3xl md:text-4xl font-black mb-3 text-gray-900 flex items-center gap-3">
