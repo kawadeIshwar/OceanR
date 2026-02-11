@@ -61,10 +61,10 @@ router.post('/forgot-password', async (req, res) => {
 
     // Check if email is the admin email
     const adminEmail = process.env.ADMIN_EMAIL || 'oceanrenterprises@gmail.com';
+    
     if (email !== adminEmail) {
-      // Don't reveal if email is valid or not for security
-      return res.json({ 
-        message: 'If an account with that email exists, an OTP has been sent to your email.' 
+      return res.status(403).json({ 
+        message: 'Only admin users can reset passwords. Please contact the administrator.' 
       });
     }
 

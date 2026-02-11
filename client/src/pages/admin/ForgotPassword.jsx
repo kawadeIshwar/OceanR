@@ -1,14 +1,23 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { Mail, ArrowLeft, ShieldCheck, Send } from 'lucide-react';
-import api from '../../utils/api';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import {
+  Mail,
+  ArrowLeft,
+  ShieldCheck,
+  Send,
+  Key,
+} from "lucide-react";
+import api from "../../utils/api";
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [resetUrl, setResetUrl] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [verifying, setVerifying] = useState(false);
 
   const {
     register,
@@ -19,93 +28,175 @@ const ForgotPassword = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      const response = await api.post('/auth/forgot-password', data);
-      setSubmitted(true);
+      const response = await api.post("/auth/forgot-password", data);
+      setOtpSent(true);
+      setEmail(data.email);
       toast.success(response.data.message);
-      
-      // In development, show the reset URL
-      if (response.data.resetUrl) {
-        setResetUrl(response.data.resetUrl);
-      }
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to send reset email');
+      if (err.response?.status === 403) {
+        toast.error(
+          "Only admin users can reset passwords. Please contact administrator."
+        );
+      } else {
+        toast.error(
+          err.response?.data?.message || "Failed to send OTP"
+        );
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 flex items-center justify-center px-4 py-12 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30"></div>
-      
-      <div className="max-w-md w-full relative z-10">
-        {/* Back to Login Link */}
-        <Link to="/admin/login" className="inline-flex items-center gap-2 text-blue-200 hover:text-white mb-6 transition-colors group">
-          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm font-semibold">Back to Login</span>
-        </Link>
+  const handleResendOTP = async () => {
+    setLoading(true);
+    try {
+      const response = await api.post("/auth/forgot-password", { email });
+      toast.success(response.data.message);
+    } catch (err) {
+      if (err.response?.status === 403) {
+        toast.error(
+          "Only admin users can reset passwords. Please contact administrator."
+        );
+      } else {
+        toast.error(
+          err.response?.data?.message || "Failed to resend OTP"
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        {/* Logo and Title */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg mb-4">
-            <ShieldCheck size={40} className="text-white" />
-          </div>
-          <h1 className="text-4xl font-black text-white mb-2">
-            <span className="text-white">OCEAN</span>
-            <span className="text-blue-400">R</span>
-          </h1>
-          <p className="text-blue-200 text-lg font-semibold">Password Recovery</p>
+  const handleVerifyOTP = async () => {
+    if (otp.length !== 6) {
+      toast.error("Please enter a valid 6-digit OTP");
+      return;
+    }
+
+    setVerifying(true);
+    try {
+      const response = await api.post("/auth/verify-otp", { email, otp });
+      toast.success(response.data.message);
+      
+      // Store token in localStorage
+      const token = response.data.resetToken;
+      if (!token) {
+        toast.error("Invalid response from server. Please contact support.");
+        return;
+      }
+      localStorage.setItem("resetToken", token);
+      
+      // Navigate to reset password page
+      navigate("/admin/reset-password", { 
+        state: { 
+          email
+        } 
+      });
+    } catch (err) {
+      toast.error(
+        err.response?.data?.message || "Invalid OTP. Please try again."
+      );
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4 relative overflow-hidden">
+
+      {/* Background Glow */}
+      <div className="absolute w-96 h-96 bg-blue-600/20 rounded-full blur-3xl -top-20 -left-20"></div>
+      <div className="absolute w-96 h-96 bg-purple-600/20 rounded-full blur-3xl -bottom-20 -right-20"></div>
+
+      {/* Back to Login */}
+      <div className="w-full max-w-md mb-6">
+        <Link
+          to="/admin/login"
+          className="inline-flex items-center gap-2 text-blue-400 hover:text-white transition"
+        >
+          <ArrowLeft size={18} />
+          <span className="text-sm font-medium">Back to Login</span>
+        </Link>
+      </div>
+
+      {/* Main Wrapper */}
+      <div className="w-full max-w-md flex flex-col items-center text-center z-10">
+
+        {/* Logo */}
+        <div className="w-20 h-20 flex items-center justify-center bg-gradient-to-br from-white to-gray-300 rounded-2xl shadow-xl mb-6 overflow-hidden">
+          <img 
+            src="/oceanr logo.png" 
+            alt="OceanR Logo" 
+            className="w-full h-full object-contain p-2"
+          />
         </div>
 
-        <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
-          {!submitted ? (
+        <h1 className="text-4xl font-extrabold text-white tracking-wide">
+          OCEAN<span className="text-blue-500">R</span>
+        </h1>
+
+        <p className="text-blue-300 font-semibold mt-2">
+          Password Recovery
+        </p>
+
+        <p className="text-gray-400 text-sm mt-2 mb-8 max-w-sm">
+          Secure reset process for administrators
+        </p>
+
+        {/* Glass Card */}
+        <div className="w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
+
+          {!otpSent ? (
             <>
-              <h2 className="text-2xl font-bold mb-2 text-white">Forgot Password?</h2>
-              <p className="text-gray-300 text-sm mb-6">
-                Enter your email address and we'll send you a link to reset your password.
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Forgot Password?
+              </h2>
+
+              <p className="text-gray-400 text-sm mb-6">
+                Enter your registered admin email and we’ll send you a
+                secure OTP.
               </p>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-5 text-left"
+              >
                 <div>
-                  <label htmlFor="email" className="block text-sm font-semibold mb-2 text-white">
+                  <label className="text-sm text-gray-300 font-medium">
                     Email Address
                   </label>
-                  <div className="relative">
+                  <div className="relative mt-2">
+                    <Mail
+                      className="absolute left-3 top-3.5 text-gray-400"
+                      size={18}
+                    />
                     <input
-                      id="email"
                       type="email"
-                      {...register('email', {
-                        required: 'Email is required',
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: 'Invalid email address',
-                        },
+                      {...register("email", {
+                        required: "Email is required",
                       })}
-                      className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 text-white placeholder-gray-400 backdrop-blur-sm transition-all"
+                      className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
                       placeholder="admin@oceanr.com"
                     />
-                    <Mail className="absolute left-3 top-3.5 text-gray-400" size={20} />
                   </div>
                   {errors.email && (
-                    <p className="mt-1 text-sm text-red-300">{errors.email.message}</p>
+                    <p className="text-red-400 text-xs mt-1">
+                      {errors.email.message}
+                    </p>
                   )}
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3.5 rounded-lg font-bold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg transition-all flex items-center justify-center gap-2"
                 >
                   {loading ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Sending...
-                    </>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   ) : (
                     <>
-                      <Send size={20} />
-                      Send Reset Link
+                      <Send size={18} />
+                      Send OTP
                     </>
                   )}
                 </button>
@@ -114,36 +205,86 @@ const ForgotPassword = () => {
           ) : (
             <div className="text-center">
               <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Send size={32} className="text-green-400" />
+                <Key size={30} className="text-green-400" />
               </div>
-              <h2 className="text-2xl font-bold mb-2 text-white">Check Your Email</h2>
-              <p className="text-gray-300 text-sm mb-6">
-                If an account exists with that email, we've sent password reset instructions.
+
+              <h2 className="text-2xl font-bold text-white mb-2">
+                OTP Sent Successfully
+              </h2>
+
+              <p className="text-gray-400 text-sm mb-4">
+                A 6-digit verification code has been sent to:
               </p>
 
-              {resetUrl && (
-                <div className="bg-yellow-500/10 border border-yellow-400/30 rounded-lg p-4 backdrop-blur-sm mb-6">
-                  <p className="text-yellow-200 text-xs font-semibold mb-2">🔧 Development Mode:</p>
-                  <a 
-                    href={resetUrl} 
-                    className="text-yellow-300 text-sm break-all hover:text-yellow-100 underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {resetUrl}
-                  </a>
-                </div>
-              )}
+              <div className="bg-blue-500/10 border border-blue-400/20 rounded-lg p-3 mb-6 text-blue-300 font-mono text-sm">
+                {email}
+              </div>
 
-              <Link 
-                to="/admin/login"
-                className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold"
-              >
-                <ArrowLeft size={16} />
-                Back to Login
-              </Link>
+              {/* OTP Input Section */}
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm text-gray-300 font-medium text-left block mb-2">
+                    Enter OTP
+                  </label>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                      setOtp(value);
+                    }}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/10 rounded-lg text-white text-center text-xl font-mono focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                    placeholder="000000"
+                    maxLength={6}
+                  />
+                </div>
+
+                <button
+                  onClick={handleVerifyOTP}
+                  disabled={verifying || otp.length !== 6}
+                  className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {verifying ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <Key size={18} />
+                      Verify OTP
+                    </>
+                  )}
+                </button>
+
+                <button
+                  onClick={handleResendOTP}
+                  disabled={loading}
+                  className="w-full py-3 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/10 transition flex items-center justify-center gap-2"
+                >
+                  {loading ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <Send size={18} />
+                      Resend OTP
+                    </>
+                  )}
+                </button>
+              </div>
+
+              <div className="mt-6 pt-6 border-t border-white/10">
+                <Link
+                  to="/admin/login"
+                  className="text-blue-400 hover:text-blue-300 text-sm font-medium inline-flex items-center gap-2"
+                >
+                  <ArrowLeft size={16} />
+                  Back to Login
+                </Link>
+              </div>
             </div>
           )}
+
+          <p className="text-center text-gray-500 text-xs mt-6">
+            Protected with enterprise-grade security
+          </p>
         </div>
       </div>
     </div>

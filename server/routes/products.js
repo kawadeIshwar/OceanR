@@ -73,22 +73,53 @@ router.post(
   validateProduct,
   async (req, res) => {
     try {
-      console.log('Received product creation request');
+      console.log('=== PRODUCT CREATION START ===');
+      console.log('Timestamp:', new Date().toISOString());
+      console.log('Environment:', process.env.NODE_ENV);
+      console.log('Request headers:', req.headers);
       console.log('Request body data:', req.body.data);
       console.log('Files:', req.files);
+      console.log('Content-Type:', req.get('Content-Type'));
 
       const productData = JSON.parse(req.body.data || '{}');
       console.log('Parsed product data:', productData);
       
+      // Validate required fields
+      if (!productData.name) {
+        return res.status(400).json({ 
+          message: 'Product name is required',
+          field: 'name'
+        });
+      }
+      
+      if (!productData.category) {
+        return res.status(400).json({ 
+          message: 'Product category is required',
+          field: 'category'
+        });
+      }
+      
       // Upload images to Cloudinary
       const imageUrls = [];
-      if (req.files?.images) {
-        console.log('Uploading images to Cloudinary...');
+      if (req.files?.images && req.files.images.length > 0) {
+        console.log('Uploading', req.files.images.length, 'images to Cloudinary...');
+        
         for (const file of req.files.images) {
           try {
+            console.log('Processing file:', {
+              originalname: file.originalname,
+              size: file.size,
+              mimetype: file.mimetype
+            });
+            
             const result = await new Promise((resolve, reject) => {
               const uploadStream = cloudinary.uploader.upload_stream(
-                { folder: 'oceanr/products' },
+                { 
+                  folder: 'oceanr/products',
+                  resource_type: 'auto',
+                  quality: 'auto',
+                  fetch_format: 'auto'
+                },
                 (error, result) => {
                   if (error) {
                     console.error('Cloudinary upload error:', error);
@@ -100,43 +131,75 @@ router.post(
               );
               uploadStream.end(file.buffer);
             });
+            
             imageUrls.push(result.secure_url);
-            console.log('Image uploaded:', result.secure_url);
+            console.log('Image uploaded successfully:', result.secure_url);
           } catch (uploadError) {
             console.error('Failed to upload image:', uploadError);
-            throw uploadError;
+            return res.status(500).json({ 
+              message: 'Image upload failed', 
+              error: uploadError.message,
+              details: 'Failed to upload image to Cloudinary'
+            });
           }
         }
+      } else {
+        console.log('No images provided in request');
       }
 
       // Prepare product data for creation
-      console.log('Original specs:', productData.specs);
       const finalProductData = {
         name: productData.name,
-        description: productData.description,
+        description: productData.description || '',
         category: productData.category,
         featured: productData.featured || false,
         specs: productData.specs || {},
         images: imageUrls,
       };
-      console.log('Final product data specs:', finalProductData.specs);
+      
+      console.log('Final product data:', JSON.stringify(finalProductData, null, 2));
 
-      console.log('Creating product with data:', finalProductData);
+      // Create product in database
+      console.log('Creating product in database...');
       const product = await Product.create(finalProductData);
       console.log('Product created successfully:', product._id);
 
+      // Populate category for response
       const populatedProduct = await Product.findById(product._id).populate('category', 'name');
-      res.status(201).json(populatedProduct);
+      
+      console.log('=== PRODUCT CREATION SUCCESS ===');
+      res.status(201).json({
+        message: 'Product created successfully',
+        product: populatedProduct
+      });
+      
     } catch (error) {
-      console.error('Create product error:', error);
-      console.error('Error stack:', error.stack);
+      console.error('=== PRODUCT CREATION ERROR ===');
+      console.error('Error details:', {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+        timestamp: new Date().toISOString()
+      });
       
       // Send more detailed error information
       if (error.name === 'ValidationError') {
+        const validationErrors = Object.values(error.errors).map(err => ({
+          field: err.path,
+          message: err.message
+        }));
         return res.status(400).json({ 
           message: 'Validation error', 
           error: error.message,
-          details: error.errors 
+          details: validationErrors
+        });
+      }
+      
+      if (error.name === 'CastError') {
+        return res.status(400).json({ 
+          message: 'Invalid data format', 
+          error: error.message,
+          details: 'Check your data types and formats'
         });
       }
       

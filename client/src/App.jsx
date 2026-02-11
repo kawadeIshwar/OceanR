@@ -19,6 +19,7 @@ import Contact from './pages/Contact';
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin';
 import ForgotPassword from './pages/admin/ForgotPassword';
+import VerifyOTP from './pages/admin/VerifyOTP';
 import ResetPassword from './pages/admin/ResetPassword';
 import AdminLayout from './components/admin/AdminLayout';
 import Dashboard from './pages/admin/Dashboard';
@@ -36,7 +37,8 @@ function App() {
           {/* Admin Auth Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/forgot-password" element={<ForgotPassword />} />
-          <Route path="/admin/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/admin/verify-otp" element={<VerifyOTP />} />
+          <Route path="/admin/reset-password" element={<ResetPassword />} />
           
           {/* Admin Protected Routes */}
           <Route

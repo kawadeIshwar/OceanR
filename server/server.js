@@ -20,13 +20,16 @@ const app = express();
 connectDB();
 
 // Middleware
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:5173',
+  process.env.PRODUCTION_FRONTEND_URL,
+  'http://localhost:3000',
+  'http://localhost:5000',
+  'https://oceanr.netlify.app'
+].filter(Boolean);
+
 app.use(cors({
-  origin: [
-    'https://oceanr.netlify.app',
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'http://localhost:5000'
-  ],
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -48,8 +51,19 @@ app.get('/api/health', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+  console.error('Error details:', {
+    message: err.message,
+    stack: err.stack,
+    url: req.url,
+    method: req.method,
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+  
+  res.status(500).json({ 
+    message: 'Something went wrong!',
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+  });
 });
 
 // Start server
