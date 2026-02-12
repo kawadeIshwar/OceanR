@@ -1,46 +1,26 @@
 import axios from 'axios';
 
-// Use environment variable for API URL with proper fallbacks
-const getApiUrl = () => {
-  const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl) {
-    return envUrl;
-  }
-  
-  // Fallback based on current environment
-  if (import.meta.env.PROD) {
-    // In production, use the current domain's API
-    return `${window.location.protocol}//${window.location.host}/api`;
-  }
-  
-  // Development fallback
-  return 'http://localhost:5000/api';
-};
-
 const api = axios.create({
-  baseURL: getApiUrl(),
-  timeout: 30000, // 30 second timeout
+  baseURL: '/api',   // 👈 PERFECT for VPS + Nginx
+  timeout: 30000,
 });
 
-// Add token to requests if it exists
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    // Only set Content-Type for non-FormData requests
+
     if (!(config.data instanceof FormData)) {
       config.headers['Content-Type'] = 'application/json';
     }
+
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Handle response errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -54,3 +34,4 @@ api.interceptors.response.use(
 );
 
 export default api;
+
