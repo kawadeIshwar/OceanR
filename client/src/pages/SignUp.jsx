@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Eye, EyeOff, Mail, Lock, User, Building2, Phone, UserPlus, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
+import api from '../utils/api';
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -24,27 +25,17 @@ const SignUp = () => {
     setError('');
     
     try {
-      // Replace with your actual API call
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
-
-      const result = await response.json();
+      const response = await api.post('/auth/register', data);
+      const result = response.data;
+      
       // Store token or user data
-      localStorage.setItem('authToken', result.token);
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result.user));
       
       // Redirect to dashboard or home
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message || 'Failed to create account. Please try again.');
+      setError(err.response?.data?.message || 'Failed to create account. Please try again.');
     } finally {
       setIsLoading(false);
     }

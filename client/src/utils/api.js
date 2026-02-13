@@ -1,7 +1,18 @@
 import axios from 'axios';
 
+// Environment-based API URL configuration
+const getApiBaseUrl = () => {
+  // Production: https://api.oceanrenterprises.com/api
+  // Development: http://localhost:5000/api
+  if (import.meta.env.PROD) {
+    return 'https://api.oceanrenterprises.com/api';
+  } else {
+    return 'http://localhost:5000/api';
+  }
+};
+
 const api = axios.create({
-  baseURL: '/api',   // 👈 PERFECT for VPS + Nginx
+  baseURL: getApiBaseUrl(),
   timeout: 30000,
 });
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Eye, EyeOff, Mail, Lock, LogIn, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
+import api from '../utils/api';
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,27 +21,17 @@ const SignIn = () => {
     setError('');
     
     try {
-      // Replace with your actual API call
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error('Invalid credentials');
-      }
-
-      const result = await response.json();
+      const response = await api.post('/auth/login', data);
+      const result = response.data;
+      
       // Store token or user data
-      localStorage.setItem('authToken', result.token);
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('user', JSON.stringify(result.user));
       
       // Redirect to dashboard or home
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message || 'Failed to sign in. Please try again.');
+      setError(err.response?.data?.message || 'Failed to sign in. Please try again.');
     } finally {
       setIsLoading(false);
     }
