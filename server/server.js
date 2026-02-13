@@ -19,56 +19,97 @@ const app = express();
 // Connect to database
 connectDB();
 
-// Middleware
+/* ===============================
+   CORS CONFIG (PRODUCTION READY)
+================================ */
+
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:5173',
-  process.env.PRODUCTION_FRONTEND_URL,
-  'http://localhost:3000',
-  'http://localhost:5000',
-  'https://oceanr.netlify.app'
-].filter(Boolean);
+  'https://oceanrenterprises.com',
+  'https://www.oceanrenterprises.com',
+  'https://api.oceanrenterprises.com',
+  'https://oceanr.netlify.app',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow server-side requests (curl, PM2, cron)
+      if (!origin) return callback(null, true);
 
-// Routes
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.error('Blocked by CORS:', origin);
+      return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  })
+);
+
+/* ===============================
+   BODY PARSERS (413 FIX)
+================================ */
+
+app.use(express.json({ limit: '20mb' }));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
+
+/* ===============================
+   ROUTES
+================================ */
+
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/quotes', quoteRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Health check route
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'OceanR API is running' });
-});
+/* ===============================
+   HEALTH CHECK
+================================ */
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Error details:', {
-    message: err.message,
-    stack: err.stack,
-    url: req.url,
-    method: req.method,
-    timestamp: new Date().toISOString(),
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'OceanR API is running',
     environment: process.env.NODE_ENV || 'development'
   });
-  
-  res.status(500).json({ 
-    message: 'Something went wrong!',
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+});
+
+/* ===============================
+   GLOBAL ERROR HANDLER
+================================ */
+
+app.use((err, req, res, next) => {
+  console.error('🔥 API Error:', {
+    message: err.message,
+    url: req.originalUrl,
+    method: req.method,
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString()
+  });
+
+  res.status(500).json({
+    success: false,
+    message: 'Internal Server Error',
+    error:
+      process.env.NODE_ENV === 'development'
+        ? err.message
+        : 'Something went wrong'
   });
 });
 
-// Start server
+/* ===============================
+   START SERVER
+================================ */
+
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
